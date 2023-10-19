@@ -36,11 +36,12 @@ jobs:
         SECRET_USERNAME: ${{ secrets.SECRET_USERNAME }}
         SECRET_PPK_VALUE: ${{ secrets.SECRET_PPK_VALUE }}
 
-      run: python tests/test_00_Boundary_Tests.py > log.txt
-      run: python tests/test_01_Edge_Cases.py >>log.txt 2>&1
-      run: python tests/test_02_Data_Type_Tests.py >>log.txt 2>&1
-      run: python tests/test_03_Corner_Cases.py >>log.txt 2>&1
-      run: python tests/test_04_Negative_Tests.py >>log.txt 2>&1
+      run: |
+        python tests/test_00_Boundary_Tests.py > log.txt
+        python tests/test_01_Edge_Cases.py >>log.txt 2>&1
+        python tests/test_02_Data_Type_Tests.py >>log.txt 2>&1
+        python tests/test_03_Corner_Cases.py >>log.txt 2>&1
+        python tests/test_04_Negative_Tests.py >>log.txt 2>&1
 
     - name: Upload logs
       uses: actions/upload-artifact@v3
