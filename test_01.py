@@ -1,2 +1,6 @@
+import time
+# ---------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
-    print('OK')
+    time0 = time.time()
+    with open('./log.txt', mode='w') as f:
+        f.write('%.2f sec OK'%(time.time()-time0))
