@@ -3,7 +3,7 @@ import os.path
 import tools_Langchain
 import tools_IO
 # ---------------------------------------------------------------------------------------------------------------------
-folder_out = './data/output/'
+folder_out = './tests/'
 # ---------------------------------------------------------------------------------------------------------------------
 def get_config_azure():
     filename_config_chat_model = './secrets/private_config_azure_chat.yaml'
@@ -28,12 +28,12 @@ def ex_02_write_unit_test(filename_in,folder_out):
             texts = f.read()
         function_name = 'json_to_pandas_v01'
 
-        for i, scanario in enumerate(['Edge Cases']):
+        for i, scanario in enumerate(['Boundary Tests','Edge Cases','Data Type Tests','Corner Cases','Happy Path Tests','Negative Tests']):
             query = f'Construct a python file routine with one unit test for function {function_name} so it can be executed in with single command in console.' \
                     f'Focus on testing the logic to cover the {scanario} scenario.'
 
             res = A.Q(query=query, context_free=True, texts=[texts])
-            with open(folder_out+'test_%02d.py'%i,mode='w') as f:
+            with open(folder_out+'test_%02d_%s.py'%(i,scanario.replace(' ','_')),mode='w') as f:
                 f.write(res)
     return
 # ---------------------------------------------------------------------------------------------------------------------

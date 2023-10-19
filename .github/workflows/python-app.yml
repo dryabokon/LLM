@@ -36,8 +36,7 @@ jobs:
         SECRET_USERNAME: ${{ secrets.SECRET_USERNAME }}
         SECRET_PPK_VALUE: ${{ secrets.SECRET_PPK_VALUE }}
 
-      run: python test_01.py
-
+      run: python tests/test_00_Boundary_Tests.py
 
     - name: Upload logs
       uses: actions/upload-artifact@v3
