@@ -4,9 +4,8 @@ import pandas as pd
 import unittest
 import inspect
 # ----------------------------------------------------------------------------------------------------------------------
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0, parentdir)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))))
+from ex_01a_unit_tests_codebase import json_to_pandas_v01
 # ----------------------------------------------------------------------------------------------------------------------
 class TestJsonToPandasV01(unittest.TestCase):
     def test_empty_list(self):

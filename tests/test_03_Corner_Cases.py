@@ -1,5 +1,8 @@
+import os
+import sys
 import unittest
 # ---------------------------------------------------------------------------------------------------------------------
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))))
 from ex_01a_unit_tests_codebase import json_to_pandas_v01
 # ---------------------------------------------------------------------------------------------------------------------
 class TestJsonToPandas(unittest.TestCase):

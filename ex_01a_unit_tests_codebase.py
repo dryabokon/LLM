@@ -29,11 +29,9 @@ def json_to_pandas_v02(list_of_dct,N = 1):
     return df_res
 # ---------------------------------------------------------------------------------------------------------------------
 def benchmark():
-    dct = [{"name": "John", "age": 30, "city": "New York"}, {"name": "Alice", "age": 25, "city": "Los Angeles"},{"name": "Bob", "age": 35, "city": "Chicago"}]
-    df1 = json_to_pandas_v01(dct,N=5000)
-    df2 = json_to_pandas_v02(dct,N=5000)
-    print(tools_DF.prettify(df1, showindex=False))
-    print(tools_DF.prettify(df2, showindex=False))
+    dct = [{"name": "John", "age": 30, "city": "New York"}, {"name": "Alice", "age": 25, "city": "Los Angeles"},{"name": "Panas", "age": 35, "city": "Kyiv"}]
+    print(tools_DF.prettify(json_to_pandas_v01(dct,N=5000), showindex=False))
+    print(tools_DF.prettify(json_to_pandas_v02(dct,N=5000), showindex=False))
     return
 # ---------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':

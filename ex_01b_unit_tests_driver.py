@@ -5,28 +5,17 @@ import tools_IO
 # ---------------------------------------------------------------------------------------------------------------------
 folder_out = './tests/'
 # ---------------------------------------------------------------------------------------------------------------------
-def get_config_azure():
-    filename_config_chat_model = './secrets/private_config_azure_chat.yaml'
-    filename_config_emb_model = './secrets/private_config_azure_embeddings.yaml'
-    filename_config_vectorstore = './secrets/private_config_azure_search.yaml'
-    dct_config = {'engine': 'azure', 'chat_model': filename_config_chat_model,'emb_model': filename_config_emb_model, 'vectorstore': filename_config_vectorstore,'search_mode_hybrid':True}
-    return dct_config
+filename_config_chat_model = './secrets/private_config_azure_chat.yaml'
+filename_config_emb_model = './secrets/private_config_azure_embeddings.yaml'
+filename_config_vectorstore = './secrets/private_config_azure_search.yaml'
+dct_config_agent = {'engine': 'azure', 'chat_model': filename_config_chat_model,'emb_model': filename_config_emb_model, 'vectorstore': filename_config_vectorstore,'search_mode_hybrid':True}
 # ---------------------------------------------------------------------------------------------------------------------
-dct_config_agent = get_config_azure()
 A = tools_Langchain.Assistant(dct_config_agent['chat_model'], dct_config_agent['emb_model'],dct_config_agent['vectorstore'], chain_type='QA',search_mode_hybrid=dct_config_agent['search_mode_hybrid'])
-#NLP = tools_Azure_NLP.Client_NLP('./secrets/private_config_azure_NLP.yaml')
 # ---------------------------------------------------------------------------------------------------------------------
-def ex_01_explain(filename_in):
-    text = open(filename_in).read()
-    print(A.Q(query='List functions from the file for further unit testing.', context_free=True, texts=text))
-
-    return
-# ---------------------------------------------------------------------------------------------------------------------
-def ex_02_write_unit_test(filename_in,folder_out):
+def write_unit_test(filename_in,function_name,folder_out):
     if os.path.isfile(filename_in):
         with open(filename_in,mode='r') as f:
             texts = f.read()
-        function_name = 'json_to_pandas_v01'
 
         for i, scanario in enumerate(['Boundary Tests','Edge Cases','Data Type Tests','Corner Cases','Happy Path Tests','Negative Tests']):
             query = f'Construct a python file routine with one unit test for function {function_name} so it can be executed in with single command in console.' \
@@ -39,6 +28,4 @@ def ex_02_write_unit_test(filename_in,folder_out):
 # ---------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     tools_IO.remove_files(folder_out,list_of_masks='*.py')
-    filename_in = './ex_01a_unit_tests_codebase.py'
-    #ex_01_explain(filename_in)
-    ex_02_write_unit_test(filename_in,folder_out)
+    write_unit_test(filename_in='./ex_01a_unit_tests_codebase.py',function_name='json_to_pandas_v01',folder_out=folder_out)

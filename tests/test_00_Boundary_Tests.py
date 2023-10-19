@@ -3,10 +3,7 @@ import sys
 import unittest
 import inspect
 # ----------------------------------------------------------------------------------------------------------------------
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0, parentdir)
-# ----------------------------------------------------------------------------------------------------------------------
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))))
 from ex_01a_unit_tests_codebase import json_to_pandas_v01
 # ----------------------------------------------------------------------------------------------------------------------
 folder_out = './data/output/'
@@ -22,4 +19,4 @@ class TestJsonToPandas(unittest.TestCase):
         self.assertIsNone(json_to_pandas_v01(dct))
 # ----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
-    unittest.main(argv=[''], exit=False)
+    unittest.main()
