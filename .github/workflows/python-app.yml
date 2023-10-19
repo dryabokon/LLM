@@ -42,5 +42,5 @@ jobs:
     - name: Upload logs
       uses: actions/upload-artifact@v3
       with:
-        name: log.txt
+        name: artifacts/log.txt
         path: artifacts/log.txt
