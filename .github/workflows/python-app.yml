@@ -29,13 +29,7 @@ jobs:
         repository: dryabokon/tools
         path: tools/
 
-    - name: specify secrets as env var and run experiment
-      env:
-        SECRET_HOST: ${{ secrets.SECRET_HOST }}
-        SECRET_PORT: ${{ secrets.SECRET_PORT }}
-        SECRET_USERNAME: ${{ secrets.SECRET_USERNAME }}
-        SECRET_PPK_VALUE: ${{ secrets.SECRET_PPK_VALUE }}
-
+    - name: unit tests
       run: |
         python tests/test_00_Boundary_Tests.py > log.txt
         python tests/test_01_Edge_Cases.py >>log.txt 2>&1
