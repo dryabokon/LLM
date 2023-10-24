@@ -84,6 +84,44 @@ def prepare_dataset_hotels():
     features_classification = [f for f in dct_entities[[k for k in dct_entities.keys()][0]] if f!=target]
     return df,dct_entities,dct_relations,features_classification,target
 # ----------------------------------------------------------------------------------------------------------------------
+def prepare_dataset_automotive():
+    df = pd.read_csv(folder_in + 'Automobile_data.csv')
+
+    df['ID']=numpy.arange(df.shape[0])
+    df = df.dropna()
+
+    dct_entities = {'Vehicle': ['make'],
+                    'Engine': ['engine_size', 'num_of_cylinders','compression_ratio'],
+                    'Power': ['horsepower'],
+                    'Price':['price']
+                    }
+    dct_relations = {'ORG': ['Vehicle', 'Engine'],
+                     'PWR': ['Vehicle', 'Power'],
+                     'ENG': ['Engine', 'Power'],
+                     }
+
+    features_classification = []
+
+    return df,dct_entities,dct_relations,features_classification,''
+# ----------------------------------------------------------------------------------------------------------------------
+def prepare_dataset_telecom():
+    df = pd.read_csv(folder_in + './WA_Fn-UseC_-Telco-Customer-Churn.csv')
+    df = df.dropna()
+    target = 'Churn'
+    dct_entities = {'Customer': ['customerID',target],
+                    'Demographics': ['gender'],
+                    'Services': ['InternetService','OnlineSecurity','OnlineBackup'],
+                    'Charges': ['MonthlyCharges','TotalCharges']
+                    }
+    dct_relations = {'ORG': ['Customer', 'Demographics'],
+                     'PWR': ['Customer', 'Services'],
+                     'ENG': ['Customer', 'Charges'],
+                     }
+
+    features_classification = []
+
+    return df, dct_entities, dct_relations, features_classification, target
+# ----------------------------------------------------------------------------------------------------------------------
 def export_to_neo4j_titanic():
     df, dct_entities, dct_relations, features, target = prepare_dataset_titanic(flat_struct_for_classification=False)
     NEO4J.export_df_to_neo4j(df, dct_entities, dct_relations, drop_if_exists=True)
@@ -94,6 +132,16 @@ def export_toneo4j_hotels():
     filename_tmp = 'hotels.json'
     NEO4J.df_to_json(df, filename_tmp)
     NEO4J.export_json_to_neo4j(filename_tmp, dct_entities, dct_relations, drop_if_exists=True)
+    return
+# ----------------------------------------------------------------------------------------------------------------------
+def export_to_neo4j_trains():
+    df, dct_entities, dct_relations, features, target = prepare_dataset_automotive()
+    NEO4J.export_df_to_neo4j(df, dct_entities, dct_relations, drop_if_exists=True)
+    return
+# ----------------------------------------------------------------------------------------------------------------------
+def export_to_neo4j_telecom():
+    df, dct_entities, dct_relations, features, target = prepare_dataset_telecom()
+    NEO4J.export_df_to_neo4j(df, dct_entities, dct_relations, drop_if_exists=True)
     return
 # ----------------------------------------------------------------------------------------------------------------------
 def ex_completion_offline(query,dct_config_agent):
@@ -129,14 +177,17 @@ def ex_completion_live(dct_config_agent):
 # ----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     #export_toneo4j_hotels()
+    #export_to_neo4j_trains()
+    #export_to_neo4j_titanic()
+    export_to_neo4j_telecom()
 
-    dct_config_agent = get_config_neo4j()
+    #dct_config_agent = get_config_neo4j()
 
     #query = "How many survived males from Southampton?"
     #query = "how many woman aged 50+ from Southampton has survived"
     #ex_completion_offline(query, dct_config_agent)
 
-    ex_completion_live(dct_config_agent)
+    #ex_completion_live(dct_config_agent)
 
     NEO4J.close()
 

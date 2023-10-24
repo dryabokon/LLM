@@ -28,9 +28,11 @@ dct_book2_HarryPotter = {'filename_in': './data/ex_LLM/HarryPotter.txt', 'text_k
 queries2 = [ 'Describe the game of Quidditch. What position does Harry play, and why is he particularly skilled at it?',
             'What is the Philosopher\'s Stone, and why is it important in the story ?']
 # ----------------------------------------------------------------------------------------------------------------------
-dct_book3 = {'azure_search_index_name':'hotels-sample-index','search_field':'Description','select':['HotelId','Rating','HotelName','Description']}
+dct_book3_hotels = {'azure_search_index_name':'hotels-sample-index','search_field':'Description','select':['HotelId','Rating','HotelName','Description']}
 # ----------------------------------------------------------------------------------------------------------------------
 dct_book4_fin_report = {'filename_in': './data/ex_LLM/MBA_Fin/AVG-ANNUAL-REPORT-2022-web.pdf', 'text_key': 'Godfather','azure_search_index_name': 'index-australian-wine-annual-report', 'search_field': 'token', 'select':'text'}
+# ----------------------------------------------------------------------------------------------------------------------
+dct_book5_sherlock = {'filename_in': './data/ex_LLM/red-headed-league.txt','azure_search_index_name':'index-sherlock','search_field': 'token', 'select': 'text'}
 # ----------------------------------------------------------------------------------------------------------------------
 def ex_import_book(dct_config_agent, dct_book):
     A = tools_Langchain.Assistant(dct_config_agent['chat_model'], dct_config_agent['emb_model'], dct_config_agent['vectorstore'], chain_type='QA')
@@ -95,8 +97,8 @@ if __name__ == '__main__':
     dct_config_agent = get_config_azure()
     #dct_config_agent = get_config_open_source()
 
-    #ex_import_book(dct_config_agent, dct_book1_godfather)
+    ex_import_book(dct_config_agent, dct_book5_sherlock)
     #ex_completion_offline(queries1,dct_config_agent,dct_book1_godfather)
-    ex_completion_live(dct_config_agent,dct_book4_fin_report,do_debug=False)
+    ex_completion_live(dct_config_agent,dct_book1_godfather,do_debug=False)
 
 
