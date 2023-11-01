@@ -42,7 +42,7 @@ def ex3(prompt):
 # ----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     #prompt = 'Who framed Roger rabit?'
-    with open('./data/ex_LLM/prompt2.txt', 'r') as f:
+    with open('./data/ex_LLM/prompt_telecom.txt', 'r') as f:
         prompt = f.read()
 
     #ex1(prompt)

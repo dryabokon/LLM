@@ -179,15 +179,15 @@ if __name__ == '__main__':
     #export_toneo4j_hotels()
     #export_to_neo4j_trains()
     #export_to_neo4j_titanic()
-    export_to_neo4j_telecom()
+    #export_to_neo4j_telecom()
 
-    #dct_config_agent = get_config_neo4j()
+    dct_config_agent = get_config_neo4j()
 
     #query = "How many survived males from Southampton?"
     #query = "how many woman aged 50+ from Southampton has survived"
     #ex_completion_offline(query, dct_config_agent)
 
-    #ex_completion_live(dct_config_agent)
+    ex_completion_live(dct_config_agent)
 
     NEO4J.close()
 

@@ -27,7 +27,7 @@ def get_config_azure():
 dct_config_agent = get_config_azure()
 dct_book = {'filename_in': './data/ex_LLM/MBA_Fin/AVG-ANNUAL-REPORT-2022-web.pdf', 'text_key': 'Godfather','azure_search_index_name': 'index-australian-wine-annual-report', 'search_field': 'token', 'select':'text'}
 A = tools_Langchain.Assistant(dct_config_agent['chat_model'], dct_config_agent['emb_model'],dct_config_agent['vectorstore'], chain_type='QA',search_mode_hybrid=dct_config_agent['search_mode_hybrid'])
-A.init_search_index(azure_search_index_name=dct_book['azure_search_index_name'],search_field=dct_book['search_field'], text_key=dct_book['select'],filename_cache=folder_out+'cache.json')
+A.init_search_index(azure_search_index_name=dct_book['azure_search_index_name'],search_field=dct_book['search_field'], text_key=dct_book['select'])
 # ----------------------------------------------------------------------------------------------------------------------
 class Plotly_App:
     def __init__(self,folder_out,dark_mode=False):
