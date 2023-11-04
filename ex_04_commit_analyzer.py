@@ -31,6 +31,8 @@ def get_config_open_source():
 dct_config_agent = get_config_open_source()
 # ---------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
+    print('Pull request')
+
     A = tools_git_analyzer.Analizer_git(dct_config_agent,repo_url,folder_out)
 
     #print(tools_DF.prettify(A.get_repo_structure_tree(), showindex=False))
