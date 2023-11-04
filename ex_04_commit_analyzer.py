@@ -6,7 +6,7 @@ import tools_DF
 from LLM import tools_git_analyzer
 # ---------------------------------------------------------------------------------------------------------------------
 folder_out = './data/output/repo/'
-repo_url = 'https://github.com/dryabokon/granulo_coins'
+repo_url = 'https://github.com/dryabokon/LLM'
 # ---------------------------------------------------------------------------------------------------------------------
 def get_config_azure():
     filename_config_chat_model = './secrets/private_config_azure_chat.yaml'
