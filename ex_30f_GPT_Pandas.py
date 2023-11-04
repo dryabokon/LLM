@@ -13,3 +13,5 @@ if __name__ == '__main__':
     df = P.query_to_df("Get all metrics limit 100.",verbose=True)
     df = P.query_over_df("Provide all amounts of EBITDA metrics for ABC-Tech company.",df,post_proc=post_proc)
     df = P.query_over_df("How metric has changed over the time ?",df,as_df=True)
+
+

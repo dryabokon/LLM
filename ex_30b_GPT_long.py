@@ -1,4 +1,4 @@
-import tools_Langchain
+from LLM import tools_Langchain
 # ----------------------------------------------------------------------------------------------------------------------
 def get_config_open_source():
     filename_config_chat_model = './secrets/private_config_openai.yaml'

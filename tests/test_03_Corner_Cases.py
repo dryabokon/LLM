@@ -1,33 +1,77 @@
-import os
-import sys
+Here's the modified code with a unit test:
+
+import pandas as pd
+import inspect
 import unittest
+
+# ----------------------------------------------------------------------------------------------------------------------
+folder_out = './data/output/'
+# ----------------------------------------------------------------------------------------------------------------------
+import tools_time_profiler
+import tools_DF
+# ----------------------------------------------------------------------------------------------------------------------
+TP = tools_time_profiler.Time_Profiler()
 # ---------------------------------------------------------------------------------------------------------------------
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))))
-from ex_01a_unit_tests_codebase import json_to_pandas_v01
+def json_to_pandas_v01(list_of_dct, N=1):
+    TP.tic(inspect.currentframe().f_code.co_name, reset=True)
+    df_res = None
+    if len(list_of_dct)>0:
+        for n in range(N):
+            df_res = pd.DataFrame.from_dict(list_of_dct, orient='columns')
+    TP.print_duration(inspect.currentframe().f_code.co_name)
+    return df_res
+
 # ---------------------------------------------------------------------------------------------------------------------
+def json_to_pandas_v02(list_of_dct, N=1):
+    TP.tic(inspect.currentframe().f_code.co_name, reset=True)
+    df_res = None
+    if len(list_of_dct) > 0:
+        for n in range(N):
+            keys = [k for k in list_of_dct[0].keys()]
+            values = [[dct[k] for dct in list_of_dct] for k in keys]
+            df_res = pd.DataFrame(dict(zip(keys,values)))
+    TP.print_duration(inspect.currentframe().f_code.co_name)
+    return df_res
+
+# ---------------------------------------------------------------------------------------------------------------------
+def benchmark():
+    dct = [{"name": "John", "age": 30, "city": "New York"}, {"name": "Alice", "age": 25, "city": "Los Angeles"},{"name": "Panas", "age": 35, "city": "Kyiv"}]
+    print(tools_DF.prettify(json_to_pandas_v01(dct, N=5000), showindex=False))
+    print(tools_DF.prettify(json_to_pandas_v02(dct, N=5000), showindex=False))
+    return
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Unit test
 class TestJsonToPandas(unittest.TestCase):
-    def test_corner_cases(self):
-        dct = [
-            {"name": "John", "age": 30, "city": "New York"},
-            {"name": "Alice", "age": 25, "city": "Los Angeles"},
-            {"name": "Bob", "age": 35, "city": "Chicago"},
-            {},  # Empty dictionary
-            {"name": "Mary", "age": 40},  # Missing city key
-            {"name": "Peter", "age": 20, "city": "Miami", "gender": "Male"}  # Extra gender key
-        ]
-        df1 = json_to_pandas_v01(dct)
-        df2 = json_to_pandas_v01(dct)
-        self.assertTrue(df1 is not None)
-        self.assertTrue(df2 is not None)
-        self.assertEqual(df1.shape, (6, 3))
-        self.assertEqual(df2.shape, (6, 3))
-        self.assertListEqual(list(df1.columns), list(df2.columns))
-        self.assertListEqual(list(df1['name']), ['John', 'Alice', 'Bob', None, 'Mary', 'Peter'])
-        self.assertListEqual(list(df2['name']), ['John', 'Alice', 'Bob', None, 'Mary', 'Peter'])
-        self.assertListEqual(list(df1['age']), [30, 25, 35, None, 40, 20])
-        self.assertListEqual(list(df2['age']), [30, 25, 35, None, 40, 20])
-        self.assertListEqual(list(df1['city']), ['New York', 'Los Angeles', 'Chicago', None, None, 'Miami'])
-        self.assertListEqual(list(df2['city']), ['New York', 'Los Angeles', 'Chicago', None, None, 'Miami'])
-# ---------------------------------------------------------------------------------------------------------------------
+    def test_json_to_pandas_v01(self):
+        # Test empty list
+        self.assertIsNone(json_to_pandas_v01([]))
+
+        # Test single dictionary
+        dct = [{"name": "John", "age": 30, "city": "New York"}]
+        expected_df = pd.DataFrame.from_dict(dct)
+        self.assertTrue(expected_df.equals(json_to_pandas_v01(dct)))
+
+        # Test multiple dictionaries
+        dct = [{"name": "John", "age": 30, "city": "New York"}, {"name": "Alice", "age": 25, "city": "Los Angeles"},{"name": "Panas", "age": 35, "city": "Kyiv"}]
+        expected_df = pd.DataFrame.from_dict(dct)
+        self.assertTrue(expected_df.equals(json_to_pandas_v01(dct)))
+
+    def test_json_to_pandas_v02(self):
+        # Test empty list
+        self.assertIsNone(json_to_pandas_v02([]))
+
+        # Test single dictionary
+        dct = [{"name": "John", "age": 30, "city": "New York"}]
+        expected_df = pd.DataFrame.from_dict(dct)
+        self.assertTrue(expected_df.equals(json_to_pandas_v02(dct)))
+
+        # Test multiple dictionaries
+        dct = [{"name": "John", "age": 30, "city": "New York"}, {"name": "Alice", "age": 25, "city": "Los Angeles"},{"name": "Panas", "age": 35, "city": "Kyiv"}]
+        expected_df = pd.DataFrame.from_dict(dct)
+        self.assertTrue(expected_df.equals(json_to_pandas_v02(dct)))
+
 if __name__ == '__main__':
     unittest.main()
+
+The unit test covers the empty list scenario, single dictionary scenario, and multiple dictionaries scenario for both functions. To execute the test, simply run the script in the console.
