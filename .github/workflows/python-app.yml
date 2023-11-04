@@ -8,12 +8,34 @@ permissions:
   contents: read
 
 jobs:
-  summarize:
+  build:
     runs-on: ubuntu-latest
-    permissions: write-all  # Some repositories need this line
 
     steps:
-      - uses: KanHarI/gpt-commit-summarizer@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    - name: Check out the code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: Clone repository
+      uses: actions/checkout@v3
+      with:
+        repository: dryabokon/tools
+        path: tools/
+
+    - name: unit tests
+      run: |
+        python tests/test_00_Boundary_Tests.py > log.txt
+        python tests/test_00_Boundary_Tests.py >>log.txt 2>&1
+
+    - name: Upload logs
+      uses: actions/upload-artifact@v3
+      with:
+        name: log
+        path: log.txt
