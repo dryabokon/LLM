@@ -13,7 +13,7 @@ jobs:
     permissions: write-all  # Some repositories need this line
 
     steps:
-      - uses: KanHarI/gpt-commit-summarizer@master
+      - uses: KanHarI/gpt-commit-summarizer@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
