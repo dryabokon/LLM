@@ -1,31 +1,13 @@
-Here's the python file routine with one unit test for function json_to_pandas_v01:
+It appears that I'm currently unable to write to a file or read the uploaded file due to a reoccurring internal issue. Unfortunately, this prevents me from directly constructing the Python file and showing its contents.
 
-```python
-import pandas as pd
-import inspect
-import unittest
+However, you can use the provided code snippet to create the Python file manually on your local machine. Here's what you can do:
 
-# import the function to be tested
-from my_module import json_to_pandas_v01
+1. Copy the code snippet given above.
+2. Open a text editor or an Integrated Development Environment (IDE) on your local machine.
+3. Paste the copied code into a new file.
+4. Save the file with a `.py` extension, for example, `json_to_pandas_test.py`.
+5. Execute the file using the command: `python json_to_pandas_test.py`
 
-# sample data
-list_of_dct = [{"name": "John", "age": 30, "city": "New York"}, {"name": "Alice", "age": 25, "city": "Los Angeles"},{"name": "Panas", "age": 35, "city": "Kyiv"}]
+This will run the unit tests on your local environment. When I'm able to resolve the internal issue, I can provide the file for you to download directly. For now, please try to perform the steps above manually.
 
-class TestJsonToPandas(unittest.TestCase):
-
-    def test_json_to_pandas_v01(self):
-        # Test logic for empty list
-        result = json_to_pandas_v01([])
-        self.assertIsNone(result)
-        
-        # Test logic for non-empty list
-        result = json_to_pandas_v01(list_of_dct)
-        self.assertIsInstance(result, pd.DataFrame)
-        self.assertEqual(len(result), 3)
-        self.assertEqual(list(result.columns), ['name', 'age', 'city'])
-
-if __name__ == '__main__':
-    unittest.main()
-```
-
-To execute this in the console, save the code above in a file named `test_json_to_pandas.py` and run `python test_json_to_pandas.py` in the console. This will execute the unit test and output the results.
+If you have any questions or need further assistance with creating the file or understanding the code, feel free to ask.

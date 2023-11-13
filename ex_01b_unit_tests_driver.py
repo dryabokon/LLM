@@ -39,5 +39,4 @@ def write_unit_test(filename_in, function_name, folder_out):
 # ---------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     tools_IO.remove_files(folder_out, list_of_masks='*.py')
-    write_unit_test(filename_in='./ex_01a_unit_tests_codebase.py', function_name='json_to_pandas_v01',
-                    folder_out=folder_out)
+    write_unit_test(filename_in='./ex_01a_unit_tests_codebase.py', function_name='json_to_pandas_v01',folder_out=folder_out)

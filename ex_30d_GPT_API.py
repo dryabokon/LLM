@@ -4,7 +4,7 @@
 folder_in = './data/ex_datasets/'
 folder_out = './data/output/'
 # ----------------------------------------------------------------------------------------------------------------------
-import tools_Langchain_API
+from LLM import tools_Langchain_API
 # ----------------------------------------------------------------------------------------------------------------------
 def get_config():
     #filename_config_chat_model = './secrets/private_config_openai.yaml'

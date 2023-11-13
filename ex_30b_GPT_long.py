@@ -34,6 +34,8 @@ dct_book4_fin_report = {'filename_in': './data/ex_LLM/MBA_Fin/AVG-ANNUAL-REPORT-
 # ----------------------------------------------------------------------------------------------------------------------
 dct_book5_sherlock = {'filename_in': './data/ex_LLM/red-headed-league.txt','azure_search_index_name':'index-sherlock','search_field': 'token', 'select': 'text'}
 # ----------------------------------------------------------------------------------------------------------------------
+dct_book6_console_logs = {'filename_in': './data/ex_logs/Fail/47419c6b011a4fc0b19898ff72280752.txt','azure_search_index_name':'idx-log-analyzer','search_field': 'token', 'select': 'text'}
+# ----------------------------------------------------------------------------------------------------------------------
 def ex_import_book(dct_config_agent, dct_book):
     A = tools_Langchain.Assistant(dct_config_agent['chat_model'], dct_config_agent['emb_model'], dct_config_agent['vectorstore'], chain_type='QA')
     if dct_config_agent['engine']=='openai':
@@ -93,12 +95,16 @@ def ex_completion_live(dct_config_agent,dct_book,do_debug=False):
         print(''.join(['='] * 20))
     return
 # ----------------------------------------------------------------------------------------------------------------------
+def pdf2text():
+    A = tools_Langchain.Assistant(dct_config_agent['chat_model'], dct_config_agent['emb_model'],dct_config_agent['vectorstore'], chain_type='QA',search_mode_hybrid=dct_config_agent['search_mode_hybrid'])
+    texts = A.pdf_to_texts('./data/ex_LLM/Godfather2.pdf')
+    return
+# ----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     dct_config_agent = get_config_azure()
-    #dct_config_agent = get_config_open_source()
-
-    #ex_import_book(dct_config_agent, dct_book5_sherlock)
+    #ex_import_book(dct_config_agent, dct_book6_console_logs)
     #ex_completion_offline(queries1,dct_config_agent,dct_book5_sherlock)
-    ex_completion_live(dct_config_agent,dct_book5_sherlock,do_debug=False)
+    #ex_completion_live(dct_config_agent,dct_book6_console_logs,do_debug=False)
+
 
 
