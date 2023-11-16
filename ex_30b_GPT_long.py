@@ -1,5 +1,7 @@
 from LLM import tools_Langchain
 # ----------------------------------------------------------------------------------------------------------------------
+import tools_console_color
+# ----------------------------------------------------------------------------------------------------------------------
 def get_config_open_source():
     filename_config_chat_model = './secrets/private_config_openai.yaml'
     filename_config_emb_model = './secrets/private_config_openai.yaml'
@@ -11,8 +13,8 @@ def get_config_azure():
     filename_config_chat_model = './secrets/private_config_azure_chat.yaml'
     filename_config_emb_model = './secrets/private_config_azure_embeddings.yaml'
     filename_config_vectorstore = './secrets/private_config_azure_search.yaml'
-
-    dct_config = {'engine': 'azure', 'chat_model': filename_config_chat_model,'emb_model': filename_config_emb_model, 'vectorstore': filename_config_vectorstore,'search_mode_hybrid':True}
+    filename_config_NLP = './secrets/private_config_azure_NLP.yaml'
+    dct_config = {'engine': 'azure', 'chat_model': filename_config_chat_model,'emb_model': filename_config_emb_model, 'vectorstore': filename_config_vectorstore,'search_mode_hybrid':True,'NLP':filename_config_NLP}
     return dct_config
 # ----------------------------------------------------------------------------------------------------------------------
 dct_book1_godfather = {'filename_in': './data/ex_LLM/Godfather.txt', 'text_key': 'Godfather', 'azure_search_index_name': 'idx-godfather-v02', 'search_field': 'token', 'select': 'text'}
@@ -36,6 +38,8 @@ dct_book5_sherlock = {'filename_in': './data/ex_LLM/red-headed-league.txt','azur
 # ----------------------------------------------------------------------------------------------------------------------
 dct_book6_console_logs = {'filename_in': './data/ex_logs/Fail/47419c6b011a4fc0b19898ff72280752.txt','azure_search_index_name':'idx-log-analyzer','search_field': 'token', 'select': 'text'}
 # ----------------------------------------------------------------------------------------------------------------------
+dct_book7_TSI = {'filename_in': './data/ex_LLM/TSI/Q-A_Session_1-Transitions_RST_CCS.pdf','azure_search_index_name':'idx-log-tsi','search_field': 'token', 'select': 'text'}
+# ----------------------------------------------------------------------------------------------------------------------
 def ex_import_book(dct_config_agent, dct_book):
     A = tools_Langchain.Assistant(dct_config_agent['chat_model'], dct_config_agent['emb_model'], dct_config_agent['vectorstore'], chain_type='QA')
     if dct_config_agent['engine']=='openai':
@@ -45,28 +49,38 @@ def ex_import_book(dct_config_agent, dct_book):
     return
 # ----------------------------------------------------------------------------------------------------------------------
 def ex_completion_offline(query,dct_config_agent,dct_book,do_debug=False):
-    A = tools_Langchain.Assistant(dct_config_agent['chat_model'], dct_config_agent['emb_model'],dct_config_agent['vectorstore'], chain_type='QA')
+    A = tools_Langchain.Assistant(dct_config_agent['chat_model'], dct_config_agent['emb_model'],dct_config_agent['vectorstore'],filename_config_NLP=dct_config_agent['NLP'], chain_type='QA')
 
     if not isinstance(query,list):
         query = [query]
 
     for q in query:
         if dct_config_agent['engine']=='openai':
-            res = A.run_chain(q, text_key=dct_book['text_key'], limit=10, do_debug=True)
+            res,texts = A.run_chain(q, text_key=dct_book['text_key'], limit=10)
         elif dct_config_agent['engine']=='azure':
-            res = A.run_chain(q, azure_search_index_name=dct_book['azure_search_index_name'], limit=10, do_debug=do_debug)
+            res,texts = A.run_chain(q, azure_search_index_name=dct_book['azure_search_index_name'], limit=10)
         else:
-            res = ''
-        print(q)
+            res,texts = '',[]
+
+        print(tools_console_color.apply_style(q,is_bold=True))
         print(res)
+        if do_debug:
+            res_short = A.Q(res + 'Question: ' + query[0] + 'Answer as named entity.', context_free=True).replace('.', '')
+            for t in texts:
+                t = tools_console_color.apply_style(t, color='gray')
+                t = tools_console_color.highlight_words(t,res_short)
+                print(t)
+                print(tools_console_color.apply_style(''.join(['-']*20),color='gray'))
+
         print(''.join(['=']*20))
     return
 # ----------------------------------------------------------------------------------------------------------------------
 def ex_completion_live(dct_config_agent,dct_book,do_debug=False):
     A = tools_Langchain.Assistant(dct_config_agent['chat_model'], dct_config_agent['emb_model'],dct_config_agent['vectorstore'], chain_type='QA',search_mode_hybrid=dct_config_agent['search_mode_hybrid'])
     should_be_closed = False
-    limit = 10
+    limit = 4
     while not should_be_closed:
+        print('>',end='')
         q = input()
         if len(q)==0:
             should_be_closed = True
@@ -82,16 +96,25 @@ def ex_completion_live(dct_config_agent,dct_book,do_debug=False):
 
         try:
             if dct_config_agent['engine']=='openai':
-                res = A.run_chain(q, text_key=dct_book['text_key'], limit=limit, do_debug=True)
+                res,texts = A.run_chain(q, text_key=dct_book['text_key'], limit=limit)
             elif dct_config_agent['engine']=='azure':
-                res = A.run_chain(q, azure_search_index_name=dct_book['azure_search_index_name'], search_field=dct_book['search_field'],select=dct_book['select'],limit=limit, do_debug=do_debug)
+                res,texts= A.run_chain(q, azure_search_index_name=dct_book['azure_search_index_name'], search_field=dct_book['search_field'],select=dct_book['select'],limit=limit)
             else:
-                res = ''
+                res,texts = '',[]
         except:
-            res = 'Error'
+            res,texts = 'Error',[]
 
         res = A.pretify_string(res)
         print(res)
+
+        if do_debug:
+            #res_short = A.Q(res + 'Question: ' + q + 'Answer as named entity.', context_free=True).replace('.', '').split()
+            for t in texts:
+                t = tools_console_color.apply_style(t, color='gray')
+                #t = tools_console_color.highlight_words(t,res_short)
+                print(A.pretify_string(t))
+                print(tools_console_color.apply_style(''.join(['-']*20),color='gray'))
+
         print(''.join(['='] * 20))
     return
 # ----------------------------------------------------------------------------------------------------------------------
@@ -102,9 +125,10 @@ def pdf2text():
 # ----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     dct_config_agent = get_config_azure()
-    #ex_import_book(dct_config_agent, dct_book6_console_logs)
-    #ex_completion_offline(queries1,dct_config_agent,dct_book5_sherlock)
-    #ex_completion_live(dct_config_agent,dct_book6_console_logs,do_debug=False)
+    #ex_import_book(dct_config_agent, dct_book7_TSI)
+    #ex_completion_offline(queries1,dct_config_agent,dct_book1_godfather,do_debug=True)
+    ex_completion_live(dct_config_agent,dct_book6_console_logs,do_debug=True)
+    #'How does the change in the standard from EN 15153-1:2013+A1:2016 to EN 15153-1:2020 in TSI LOC&PAS impact the compliance of head lamps?'
 
 
 

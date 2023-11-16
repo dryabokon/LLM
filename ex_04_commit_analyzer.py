@@ -37,20 +37,20 @@ def ex_history():
     return
 # ---------------------------------------------------------------------------------------------------------------------
 def ex_stats_incremental(create_patch=True):
-    for i in range(3):
-        print(tools_DF.prettify(A.get_diff(base=i,back=i+1, create_patch=create_patch), tablefmt='grid' if create_patch else 'psql', showindex=False,maxcolwidths=20))
+    for i in range(7):
+        print(tools_DF.prettify(A.get_diff(base=i,back=i+1, create_patch=create_patch), tablefmt='grid' if create_patch else 'psql', showindex=False,maxcolwidths=80))
     return
 # ---------------------------------------------------------------------------------------------------------------------
 def summarize_commit():
-    print(tools_DF.prettify(A.summarize_commit(base=1,back=2, detailed=True), tablefmt='grid', showindex=False,maxcolwidths=30))
+    print(tools_DF.prettify(A.summarize_commit(base=1,back=3, detailed=True), tablefmt='grid', showindex=False,maxcolwidths=30))
     return
 # ---------------------------------------------------------------------------------------------------------------------
 def summarize_commits():
-    print(tools_DF.prettify(A.summarize_commits(max_count=5), tablefmt='grid', showindex=False,maxcolwidths=30))
+    print(tools_DF.prettify(A.summarize_commits(max_count=9), tablefmt='grid', showindex=False,maxcolwidths=30))
     return
 # ---------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
-    #ex_history()
+    # ex_history()
     #ex_stats_incremental()
     summarize_commit()
     #summarize_commits()

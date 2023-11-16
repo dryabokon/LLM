@@ -61,7 +61,7 @@ def step_02_predict(dct_config_agent,azure_search_index_name,filename_out):
     if os.path.isfile(filename_out):
         os.remove(filename_out)
     for question,answer_gt in zip(questions,answers_GT):
-        df = pd.DataFrame(numpy.array([question, answer_gt, A.run_chain(prefix+question, azure_search_index_name=azure_search_index_name, limit=10)]).reshape((1,3)),columns=['question','answer_gt','answer_pred'])
+        df = pd.DataFrame(numpy.array([question, answer_gt, A.run_chain(prefix+question, azure_search_index_name=azure_search_index_name, limit=10)[0]]).reshape((1,3)),columns=['question','answer_gt','answer_pred'])
         if not os.path.isfile(filename_out):
             df.to_csv(filename_out, index=False)
         else:
