@@ -40,6 +40,8 @@ dct_book6_console_logs = {'filename_in': './data/ex_logs/Fail/47419c6b011a4fc0b1
 # ----------------------------------------------------------------------------------------------------------------------
 dct_book7_TSI = {'filename_in': './data/ex_LLM/TSI/Q-A_Session_1-Transitions_RST_CCS.pdf','azure_search_index_name':'idx-log-tsi','search_field': 'token', 'select': 'text'}
 # ----------------------------------------------------------------------------------------------------------------------
+dct_book8_TSI = {'filename_in': './data/ex_LLM/TSI/OJ_L_2023_222_FULL_EN_TXT.pdf','azure_search_index_name':'idx-ojl','search_field': 'token', 'select': 'text'}
+# ----------------------------------------------------------------------------------------------------------------------
 def ex_import_book(dct_config_agent, dct_book):
     A = tools_Langchain.Assistant(dct_config_agent['chat_model'], dct_config_agent['emb_model'], dct_config_agent['vectorstore'], chain_type='QA')
     if dct_config_agent['engine']=='openai':
@@ -125,10 +127,12 @@ def pdf2text():
 # ----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     dct_config_agent = get_config_azure()
-    #ex_import_book(dct_config_agent, dct_book7_TSI)
-    #ex_completion_offline(queries1,dct_config_agent,dct_book1_godfather,do_debug=True)
+    #ex_import_book(dct_config_agent, dct_book8_TSI)
+    #queries = ['How section 6.%d is named? Give exact short answer.' % i for i in range(57)]
+
+    #ex_completion_offline(queries,dct_config_agent,dct_book8_TSI,do_debug=False)
     ex_completion_live(dct_config_agent,dct_book6_console_logs,do_debug=True)
-    #'How does the change in the standard from EN 15153-1:2013+A1:2016 to EN 15153-1:2020 in TSI LOC&PAS impact the compliance of head lamps?'
+
 
 
 

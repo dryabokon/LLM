@@ -8,7 +8,7 @@ import numpy
 folder_in = './data/ex_datasets/'
 folder_out = './data/output/'
 # ----------------------------------------------------------------------------------------------------------------------
-import tools_Langchain
+from LLM import tools_Langchain
 import tools_neo4j
 # ----------------------------------------------------------------------------------------------------------------------
 filename_config_neo4j = './secrets/private_config_neo4j.yaml'
@@ -122,6 +122,10 @@ def prepare_dataset_telecom():
 
     return df, dct_entities, dct_relations, features_classification, target
 # ----------------------------------------------------------------------------------------------------------------------
+def prepare_dataset_railways():
+    df = pd.read_csv(folder_in + 'railways.csv')
+    return
+# ----------------------------------------------------------------------------------------------------------------------
 def export_to_neo4j_titanic():
     df, dct_entities, dct_relations, features, target = prepare_dataset_titanic(flat_struct_for_classification=False)
     NEO4J.export_df_to_neo4j(df, dct_entities, dct_relations, drop_if_exists=True)
@@ -181,15 +185,99 @@ if __name__ == '__main__':
     #export_to_neo4j_titanic()
     #export_to_neo4j_telecom()
 
-    dct_config_agent = get_config_neo4j()
+    #dct_config_agent = get_config_neo4j()
 
     #query = "How many survived males from Southampton?"
     #query = "how many woman aged 50+ from Southampton has survived"
     #ex_completion_offline(query, dct_config_agent)
 
-    ex_completion_live(dct_config_agent)
+    #ex_completion_live(dct_config_agent)
 
-    NEO4J.close()
+    #NEO4J.close()
+    lst = [['Acknowledgement',
+            'Confirmation given by the driver to a request from the ETCS on-board that he/she has received information he/she needs to take into account.'],
+           ['Applicable speed limit (in SR)',
+            'The lowest speed limit of:\
+            — maximum speed for SR,\
+            — maximum train speed,\
+            — timetable / Route Book,\
+            — temporary speed restrictions (transmitted by other means than European Instruction 1, 2, 5, 6, 7 or 8),\
+            — European Instruction.'],
+           ['Authorisation for ERTMS train movement',
+            'Permission for a train to move given by means of:\
+            — a trackside signal at proceed aspect, or\
+            — an MA, or\
+            — a European Instruction:\
+            — to start after preparing a movement, or\
+            — to pass EOA, or\
+            — to proceed after trip.'],
+
+           ['Border crossing',
+            'Location where trains cross from a railway network in one Member State to a railway network in another Member State.'],
+           ['De-registration',
+            'Termination of the temporary relationship between the telephone number and the train running number. This action can be initiated by the user of a GSM-R radio, by automatic systems or by the network authority. The de-registration allows the de-registered train running number to be re-used.'],
+           ['Driver Machine Interface (DMI)',
+            'Train device to enable communication between the ETCS on-board and the driver.'],
+           ['Emergency propelling area', 'Area where propelling movements in RV are allowed.'],
+           ['Emergency stop order',
+            'ETCS order braking a train with the maximum brake force until the train is at a standstill.'],
+           ['ETCS Location Marker',
+            'Harmonised trackside ETCS marker board defined in EN 16494/2015(2)used to identify a potential EOA, e.g. the end of a block section.'],
+           ['ETCS on-board', 'The part of ETCS installed on a railway vehicle.'],
+           ['ETCS Stop Marker',
+            'Harmonised trackside ETCS marker board defined in EN 16494/2015 used to:\
+            — identify a potential EOA, and\
+            —indicate the location where a driver has to stop the train, if running without an MA.'],
+           ['ETCS operational train category',
+            'Set of technical and/or operational characteristics of a train to which a specific ETCS speed profile applies.'],
+           ['Functional number (GSM-R)',
+            'Full number used within the functional addressing scheme to identify an end user or a system by function or role rather than by a specific item of radio equipment or user subscription.\
+            The functional number can be divided into two parts:\
+            — functional addressing (process of addressing a call using a specific number, representing the function a user is performing, rather than a number identifying the GSM-R on-board),\
+            —location dependent addressing (process of addressing a particular function – typically a signaller – based on the current location of the user – typically a train).'],
+           ['GSM-R mode',
+            'Status of the GSM-R on-board which provides functions for:\
+            — train movement,\
+            — or movement of a shunting composition.'],
+           ['GSM-R network', 'Radio network which provides GSM-R functions.'],
+           ['GSM-R network marker',
+            'Harmonised trackside GSM-R signal defined in EN 16494/2015 to indicate the network to be selected.'],
+           ['GSM-R on-board', 'The part of GSM-R installed on a railway vehicle.'],
+           ['Maximum speed for RV', 'Maximum speed given from the ETCS trackside in RV'],
+           ['Maximum speed for SR', 'Maximum speed given from the ETCS trackside in SR.'],
+           ['Movement Authority (MA)',
+            'Permission for a train (shunting composition) to move to a specific location with supervision of speed.'],
+           ['Non-stopping area',
+            'Area defined by the Infrastructure Manager where it may not be safe or suitable to stop a train.'],
+           ['Override EOA speed', 'Maximum speed when the override EOA function is active.'],
+           ['Permitted speed',
+            'Maximum speed at which a train can run without ETCS warning and/or brake intervention.'],
+           ['Proceed aspect', 'Any signal aspect which permits the driver to pass the signal.'],
+           ['Propelling', 'Movement of a train where the driver is not in the leading cab of the leading vehicle.'],
+           ['Radio communication', 'Exchange of information between the ETCS on-board and the RBC/radio infill unit.'],
+           ['Radio Block Centre (RBC)', 'ETCS trackside centralised unit controlling ETCS train movements in level 2.'],
+           ['Radio hole',
+            'A pre-defined area where it is not possible to establish a reliable radio communication channel.'],
+           ['Registration', 'Temporary relationship between the telephone number and the train running number.'],
+           ['Release speed', 'Maximum speed at which a train is allowed to reach the end of its MA.'],
+           ['Revocation of MA', 'Withdrawal of a previous given Movement Authority.'],
+           ['Route Book',
+            'Description of the lines and the associated line-side equipment for the lines over which the driver will operate and relevant to the driving task.'],
+           ['Securing', 'Measures to be applied to avoid unintentional movement of railway vehicles.'],
+           ['Shunting movement', 'Way of moving vehicles without train data and controlled by shunting orders.'],
+           ['Tandem',
+            'Two or more traction units mechanically and pneumatically but not electrically coupled in the same train, each one requiring its own driver.'],
+           ['Temporary speed restriction', 'Reduction of the line speed for a limited period of time.'],
+           ['Text message', 'Information in writing displayed on the Driver Machine Interface.'],
+           ['Train data', 'Information which describes the characteristics of a train.'],
+           ['Train preparer', 'Staff in charge of the preparation of a train.'],
+           ['Transition', 'Controlled change between the different ETCS levels.'],
+           ['Transition point', 'Point where a transition between ETCS levels takes place.'],
+           ['Trip',
+            'Irrevocable application of the emergency brakes by ETCS until the train/shunting composition is at a standstill.']]
+    pd.DataFrame(lst, columns=['Term', 'Definition']).to_csv('railways.csv', index=False)
+
+
 
 
 

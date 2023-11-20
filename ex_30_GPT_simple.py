@@ -32,5 +32,5 @@ def ex2(prompt):
 if __name__ == '__main__':
     prompt = 'Who framed Roger rabit?'
 
-    #ex1(prompt)
-    ex2(prompt)
+    ex1(prompt)
+    #ex2(prompt)
