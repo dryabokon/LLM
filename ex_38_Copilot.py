@@ -1,41 +1,32 @@
 import folium
 import pandas as pd
 
+# Assuming 'happiness_index.csv' is a CSV file with 'Country' and 'Happiness_Index' columns
+happiness_index_data = pd.read_csv('./data/ex_datasets/happiness_index.csv')
 
-data = {    'Country': ['Argentina','Colombia','United States','Spain','South Africa','Sweden','Japan','Italy','Brazil','United Kingdom','Netherlands','France','Mexico','South Korea','Germany','Australia','Canada','Thailand','Nigeria','Ireland','Kenya','India','United Arab Emirates','Singapore','Saudi Arabia','China','Malaysia','Indonesia'],
-            'score':[164,136,133,133,132,130,122,120,120,119,118,117,117,116,116,109,109,98,98,96,86,71,66,64,61,59,55,55]
-        }
+# Path to the GeoJSON file (this must be stored locally or accessible via a URL)
+geojson_path = './data/ex_datasets/world_countries.json'
 
+# Initialize a folium map at a global scale
+m = folium.Map(location=[0, 0], zoom_start=2)
 
-df = pd.DataFrame(data)
-if __name__ == '__main__':
-    world_geo = './world_countries.json'  # Replace with the path to your GeoJSON file
-    m = folium.Map(location=[20, 0], zoom_start=2, tiles='CartoDB positron')
+# Create a Choropleth layer
+folium.Choropleth(
+    geo_data=geojson_path,
+    name='choropleth',
+    data=happiness_index_data,
+    columns=['Country', 'Index'],  # replace with actual column names in your CSV
+    key_on='feature.properties.name',  # replace with the key that contains country names in your GeoJSON
+    fill_color='RdBu',  # Color scheme
+    fill_opacity=0.7,
+    line_opacity=0.2,
+    legend_name='Happiness Index',
+    water_color='gray',
+).add_to(m)
 
+# Add layer control to toggle the Choropleth layer
+folium.LayerControl().add_to(m)
 
-    folium.Choropleth(
-        geo_data=world_geo,
-        data=df,
-        columns=['Country', 'score'],
-        key_on='feature.properties.name',
-        fill_color='YlOrRd',
-        fill_opacity=0.7,
-        line_opacity=0.2,
-        legend_name='Polarization score',
-        smooth_factor=0,
-        Highlight=True,
-        line_color="#0000",
-        name='Index',
-        show=True,
-        overlay=True,
-        nan_fill_color="White",
-        water_color='gray'
-    ).add_to(m)
-
-    m.save('./data/output/Polarization_score.html')
-
-
-
-
-
+# Save the map to an HTML file
+m.save('happiness_index_map.html')
 
