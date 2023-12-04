@@ -1,6 +1,10 @@
 # ---------------------------------------------------------------------------------------------------------------------
+import pandas as pd
+
 import tools_DF
-from LLM import tools_git_analyzer
+import tools_git_analyzer
+# ---------------------------------------------------------------------------------------------------------------------
+from LLM2 import llm_config
 # ---------------------------------------------------------------------------------------------------------------------
 folder_out = './data/output/repo/'
 #repo_url = 'https://github.com/dryabokon/tools'
@@ -23,13 +27,17 @@ def get_config_open_source():
     return dct_config
 # ---------------------------------------------------------------------------------------------------------------------
 #dct_config_agent = get_config_azure()
-dct_config_agent = get_config_open_source()
+#dct_config_agent = get_config_open_source()
+llm_cnfg = llm_config.get_config_openAI()
 # ---------------------------------------------------------------------------------------------------------------------
-A = tools_git_analyzer.Analizer_git(dct_config_agent,repo_url,folder_out)
+A = tools_git_analyzer.Analizer_git(llm_cnfg,repo_url,folder_out)
 # ---------------------------------------------------------------------------------------------------------------------
 def ex_repo_structure():
     #print(A.get_repo_structure_tree(as_txt=True))
-    print(tools_DF.prettify(A.get_repo_structure_tree(), showindex=False))
+    #print(tools_DF.prettify(A.get_repo_structure_tree(), showindex=False))
+    df = pd.DataFrame([])
+    #A.recusive_module_search(df)
+
     return
 # ---------------------------------------------------------------------------------------------------------------------
 def ex_history():
@@ -42,7 +50,7 @@ def ex_stats_incremental(create_patch=True):
     return
 # ---------------------------------------------------------------------------------------------------------------------
 def summarize_commit():
-    print(tools_DF.prettify(A.summarize_commit(base=1,back=3, detailed=True), tablefmt='grid', showindex=False,maxcolwidths=30))
+    print(tools_DF.prettify(A.summarize_commit(base=1,back=2, detailed=True), tablefmt='grid', showindex=False,maxcolwidths=30))
     return
 # ---------------------------------------------------------------------------------------------------------------------
 def summarize_commits():
@@ -50,7 +58,8 @@ def summarize_commits():
     return
 # ---------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
-    # ex_history()
+    #ex_history()
+    #ex_repo_structure()
     #ex_stats_incremental()
     summarize_commit()
     #summarize_commits()
