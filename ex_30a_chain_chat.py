@@ -38,6 +38,8 @@ def ex3_Azure_chat(prompt='Who framed Roger rabit?'):
     #OK
     llm_cnfg = llm_config.get_config_azure()
     LLM = llm_models.get_model(llm_cnfg.filename_config_chat_model, model_type='QA')
+    #chain = llm_chains.get_chain_chat(LLM)
+
     res = LLM([HumanMessage(content=prompt)]).content
     print(res)
     print(''.join(['-'] * 50))
@@ -56,16 +58,16 @@ def ex4_Azure_summarize(prompt='What is common across the texts.Response with si
     print(''.join(['-']*50))
     return
 # ----------------------------------------------------------------------------------------------------------------------
+# from LLM2 import llm_RAG
+# llm_cnfg = llm_config.get_config_azure()
+# LLM = llm_models.get_model(llm_cnfg.filename_config_chat_model, model_type='QA')
+# chain = llm_chains.get_chain_chat(LLM)
+# res = chain.run(question='1+1', input_documents=[])
+# print(res)
+# ----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
 
     #ex1_openai_chat()
     #ex2_openai_summarize()
-    #ex3_Azure_chat()
+    ex3_Azure_chat()
     #ex4_Azure_summarize()
-    from LLM2 import llm_RAG
-
-    llm_cnfg = llm_config.get_config_azure()
-    LLM = llm_models.get_model(llm_cnfg.filename_config_chat_model, model_type='QA')
-    chain = llm_chains.get_chain_chat(LLM)
-    res = chain.run(question='1+1', input_documents=[])
-    print(res)

@@ -58,11 +58,12 @@ def summarize_commits():
     return
 # ---------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
-    #ex_history()
+    ex_history()
     #ex_repo_structure()
     #ex_stats_incremental()
-    summarize_commit()
+    #summarize_commit()
     #summarize_commits()
+
 
 
 
