@@ -67,7 +67,7 @@ def ex4_Azure_summarize(prompt='What is common across the texts.Response with si
 # ----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
 
-    #ex1_openai_chat()
-    #ex2_openai_summarize()
-    ex3_Azure_chat()
+    ex1_openai_chat()
+    ex2_openai_summarize()
+    #ex3_Azure_chat()
     #ex4_Azure_summarize()

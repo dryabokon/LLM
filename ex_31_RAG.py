@@ -4,7 +4,7 @@ from LLM2 import llm_chains
 from LLM2 import llm_RAG
 from LLM2 import llm_interaction
 # ----------------------------------------------------------------------------------------------------------------------
-dct_book1_godfather = {'filename_in': './data/ex_LLM/Godfather.txt', 'azure_search_index_name': 'idx-godfather', 'search_field': 'token', 'select': 'text'}
+dct_book1_godfather = {'filename_in': './data/ex_LLM/Godfather_2.txt', 'azure_search_index_name': 'idxgfvect2', 'search_field': 'token', 'select': 'text'}
 queries1 = [ 'What was the favorite horse of the movie producer passionate about racing?',
             'How Sonny was killed ?',
             'What is Mike\'s hobby?',
@@ -38,7 +38,8 @@ def ex_import_book(llm_cnfg, dct_book):
 # ----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
 
-    llm_cnfg = llm_config.get_config_azure()
+    #llm_cnfg = llm_config.get_config_azure()
+    llm_cnfg = llm_config.get_config_openAI()
 
     #ex_import_book(llm_cnfg, dct_book1_godfather)
 
@@ -48,7 +49,11 @@ if __name__ == '__main__':
 
     A = llm_RAG.RAG(chain, filename_config_vectorstore=llm_cnfg.filename_config_vectorstore,vectorstore_index_name=dct_book['azure_search_index_name'],filename_config_emb_model=llm_cnfg.filename_config_emb_model)
     llm_interaction.interaction_offline(A,queries1,do_debug=True,do_spinner=True)
-    #llm_interaction.interaction_live(A,do_debug=False,do_spinner=True)
+    #llm_interaction.interaction_live(A,do_debug=True,do_spinner=True)
+
+
+
+
 
 
 
