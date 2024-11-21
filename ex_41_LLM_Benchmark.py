@@ -49,7 +49,7 @@ def convert_data_squad(filename_in,filename_txt,filter_title=None):
 # ----------------------------------------------------------------------------------------------------------------------
 def step_01_import_texts_to_azure(dct_config_agent,filename_in,azure_search_index_name):
     A = tools_Langchain.Assistant(dct_config_agent['chat_model'], dct_config_agent['emb_model'],dct_config_agent['vectorstore'], chain_type='QA')
-    A.add_document_azure(filename_in=filename_in, azure_search_index_name=azure_search_index_name)
+    A.add_book(filename_in=filename_in, azure_search_index_name=azure_search_index_name)
     return
 # ----------------------------------------------------------------------------------------------------------------------
 def step_02_predict(dct_config_agent,azure_search_index_name,filename_out):

@@ -90,7 +90,7 @@ def compose_single_html(filename_out,dct_QA):
     return
 # ----------------------------------------------------------------------------------------------------------------------
 def add_document_to_azure():
-    A.add_document_azure(dct_book['filename_in'], azure_search_index_name=dct_book['azure_search_index_name'])
+    A.add_book(dct_book['filename_in'], azure_search_index_name=dct_book['azure_search_index_name'])
     return
 # ----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':

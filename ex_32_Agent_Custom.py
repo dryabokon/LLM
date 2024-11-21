@@ -13,7 +13,8 @@ dct_config_agent = llm_config.get_config_azure()
 def ex_agent_custom1():
     q1 = "what is IRR of a cashflow below: -100, 30, 30, 30, 30"
 
-    llm_cnfg = llm_config.get_config_openAI()
+    #llm_cnfg = llm_config.get_config_openAI()
+    llm_cnfg = llm_config.get_config_azure()
     LLM = llm_models.get_model(llm_cnfg.filename_config_chat_model, model_type='QA')
     tools = llm_tools.get_tool_IRR()
     A = llm_Agent.Agent(LLM, tools, verbose=True)
@@ -27,7 +28,7 @@ def ex_agent_custom2():
     llm_cnfg = llm_config.get_config_openAI()
     LLM = llm_models.get_model(llm_cnfg.filename_config_chat_model, model_type='QA')
     tools = llm_tools.get_tool_age_of_Alice()
-    #tools.extend(llm_tools.get_tool_age_of_Bob())
+    tools.extend(llm_tools.get_tool_age_of_Bob())
     A = llm_Agent.Agent(LLM, tools, verbose=True)
     llm_interaction.interaction_offline(A, q1, do_debug=True, do_spinner=False)
 
@@ -35,4 +36,4 @@ def ex_agent_custom2():
 # ----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
 
-    ex_agent_custom1()
+    ex_agent_custom2()

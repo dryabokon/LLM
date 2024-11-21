@@ -1,4 +1,6 @@
+import pandas as pd
 import tools_Azure_Search
+import json
 import tools_DF
 # ----------------------------------------------------------------------------------------------------------------------
 docs0 = [    {"hotelId": "1","hotelName": "Fancy Stay","description": "Best hotel in town if you like luxury hotels.","category": "Luxury"},
@@ -21,9 +23,9 @@ def ex_upload(docs,new_index_name):
 
     return
 # ----------------------------------------------------------------------------------------------------------------------
-def ex_tokenize_and_upload(docs,new_index_name):
+def ex_tokenize_and_upload(docs,new_index_name,field_source='description',field_embedding='token'):
 
-    docs_e = C.tokenize_documents(docs, field_source='description', field_embedding='token')
+    docs_e = C.tokenize_documents(docs, field_source=field_source, field_embedding='token')
     if new_index_name not in C.get_indices():
         C.create_search_index(docs_e,'token',new_index_name)
 
@@ -34,31 +36,34 @@ def ex_tokenize_and_upload(docs,new_index_name):
 def ex_search(query,index_name,select=None):
 
     C.search_client = C.get_search_client(index_name)
-    df = C.search_semantic(query=query,select=select,as_df=True,limit=2)
+    df = C.search_semantic(query=query,select=select,as_df=True,limit=5)
     print('search_semantic')
     print(tools_DF.prettify(df, showheader=True, showindex=False))
 
-
     print('search_vector')
-    res = C.search_vector(query=query,as_df=False, select=select,limit=3)
-    print(res)
+    df = C.search_vector(query=query,as_df=True, select=select,limit=5)
+    print(tools_DF.prettify(df, showheader=True, showindex=False))
 
     print('search_hybrid')
-    df = C.search_hybrid(query=query, as_df=True, select=select, limit=4)
+    df = C.search_hybrid(query=query, as_df=True, select=select, limit=5)
     print(tools_DF.prettify(df, showheader=True, showindex=False))
 
     return
 # ----------------------------------------------------------------------------------------------------------------------
+#ex_upload(docs,new_index_name='stackoverflow123')
+#C.search_index_client.delete_index('delme123')
+#ex_upload(docs0,new_index_name='delme123')
+#ex_tokenize_and_upload(docs0,'idxgl6_tokenized')
+# ----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
 
-    index_name ='idxgfvect2'
+    #index_name = 'idxgfvect2'
+    index_name = 'stackoverflow125body'
     C = tools_Azure_Search.Client_Search('./secrets/GL/private_config_azure_search.yaml',filename_config_emb_model='./secrets/GL/private_config_azure_embeddings.yaml',index_name=index_name)
-    C.search_index_client.delete_index('delme123')
-    ex_upload(docs0,new_index_name='delme123')
-    #ex_tokenize_and_upload(docs0,'idxgl6_tokenized')
-    #ex_search('*',index_name,select=['uuid','text'])
+    #ex_tokenize_and_upload(json.load(open('./data/ex_datasets/stackoverflow.json', encoding="utf-8")), index_name, field_source='question_body')
 
-    print(C.get_indices())
+    #ex_search('How is Tom?',index_name,select=['uuid','text'])
 
-
+    #69044983
+    ex_search('How to plot stacked bar if number of columns is not known?',index_name,select=['question_id','question_title'])
 

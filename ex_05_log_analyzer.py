@@ -33,4 +33,4 @@ def ex_01():
 # ---------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     azure_search_index_name = 'idx-log-analyzer'
-    A.add_document_azure(filename_in, azure_search_index_name=azure_search_index_name)
+    A.add_book(filename_in, azure_search_index_name=azure_search_index_name)

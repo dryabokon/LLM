@@ -66,25 +66,25 @@ class Plotly_App:
 
     # ---------------------------------------------------------------------------------------------------------------------
     def build_layout(self):
-        # header = dbc.Row(html.Div([html.Img(src=self.get_asset_url() + 'image6.png')],
-        #                           style={'display': 'flex', 'justify-content': 'center', 'align-items': 'center',
-        #                                  'background-color': '#E4E4E4'}))
-        # output = dbc.Row(dbc.Textarea(id='output', value=''))
-        # input = dbc.Row(dbc.Input(id='input', value=''))
-        # button = dbc.Row(dbc.Button("Run", id='submit', color="", size="sm", style=self.style_button))
-        #
-        # res = [header, output, input, button]
-        # layout = dbc.Container(res, style={'width': '50%', 'font-family': 'Ubuntu Mono'}, fluid=True)
+        header = dbc.Row(html.Div([html.Img(src=self.get_asset_url() + 'image6.png')],
+                                  style={'display': 'flex', 'justify-content': 'center', 'align-items': 'center',
+                                         'background-color': '#E4E4E4'}))
+        output = dbc.Row(dbc.Textarea(id='output', value=''))
+        input = dbc.Row(dbc.Input(id='input', value=''))
+        button = dbc.Row(dbc.Button("Run", id='submit', color="", size="sm", style=self.style_button))
 
-        layout = html.Div([
-            html.Div([
-                html.Label("Enter text:"),
-                dcc.Input(id="input-text", type="text", style={"margin-right": "10px"}),
-                html.Button("Submit", id="submit-button")
-            ]),
-            html.Div(id="progress-output", style={"margin-top": "20px"}),
-            html.Div(id="final-output", style={"margin-top": "20px"})
-        ])
+        res = [header, output, input, button]
+        layout = dbc.Container(res, style={'width': '50%', 'font-family': 'Ubuntu Mono'}, fluid=True)
+
+        # layout = html.Div([
+        #     html.Div([
+        #         html.Label("Enter text:"),
+        #         dcc.Input(id="input-text", type="text", style={"margin-right": "10px"}),
+        #         html.Button("Submit", id="submit-button")
+        #     ]),
+        #     html.Div(id="progress-output", style={"margin-top": "20px"}),
+        #     html.Div(id="final-output", style={"margin-top": "20px"})
+        # ])
 
         return layout
 
@@ -108,60 +108,60 @@ class Plotly_App:
         return refresh_needed
 
     # ---------------------------------------------------------------------------------------------------------------------
-    # def set_callbacks(self):
-    #     @self.app.long_callback(output=
-    #                             [
-    #                                 Output('output', 'value')
-    #                             ],
-    #                             imput=
-    #                             [
-    #                                 Input('output', 'value'),
-    #                                 Input('input', 'value'),
-    #                                 Input('submit', 'n_clicks')
-    #                             ],
-    #                             running=
-    #                             [
-    #                                 (Output('output', 'value'), True, False)
-    #                              ])
-    #     def global_callback(txt_output, txt_input, btn_click):
-    #         ctx = dash.callback_context
-    #         refresh_needed = self.is_refresh_needed(ctx.triggered[0]['prop_id'])
-    #         response = txt_output
-    #         if refresh_needed:
-    #             prompt = txt_input
-    #             # response = self.A.run_query(prompt)
-    #             response = prompt
-    #             for step in range(10):
-    #                 time.sleep(10)
-    #                 return f"Long process finished for '{step}'!", ""
-    #
-    #         return [response]
-
     def set_callbacks(self):
-        @self.app.long_callback(
-            output=[
-                dash.Output("final-output", "children"),
-                dash.Output("progress-output", "children"),
-            ],
-            inputs=[
-                dash.Input("submit-button", "n_clicks"),
-                dash.State("input-text", "value")
-            ],
-            running=[
-                (dash.Output("submit-button", "disabled"), True, False),
-                (dash.Output("input-text", "disabled"), True, False)
-            ],
-            progress=dash.Output("progress-output", "children"),
-            prevent_initial_call=True
-        )
-        def update_output(set_progress, n_clicks, input_value):
-            if n_clicks:
-                total_steps = 10
-                for step in range(total_steps):
-                    time.sleep(1)  # Simulating a long process
-                    set_progress(f"Processing '{input_value}'... {int((step + 1) / total_steps * 100)}%")
-                return f"Long process finished for '{input_value}'!", ""
-            return "", "Enter text and click submit to start."
+        @self.app.long_callback(output=
+                                [
+                                    Output('output', 'value')
+                                ],
+                                imput=
+                                [
+                                    Input('output', 'value'),
+                                    Input('input', 'value'),
+                                    Input('submit', 'n_clicks')
+                                ],
+                                running=
+                                [
+                                    (Output('output', 'value'), True, False)
+                                 ])
+        def global_callback(txt_output, txt_input, btn_click):
+            ctx = dash.callback_context
+            refresh_needed = self.is_refresh_needed(ctx.triggered[0]['prop_id'])
+            response = txt_output
+            if refresh_needed:
+                prompt = txt_input
+                # response = self.A.run_query(prompt)
+                response = prompt
+                for step in range(10):
+                    time.sleep(10)
+                    return f"Long process finished for '{step}'!", ""
+
+            return [response]
+
+    # def set_callbacks(self):
+    #     @self.app.long_callback(
+    #         output=[
+    #             dash.Output("final-output", "children"),
+    #             dash.Output("progress-output", "children"),
+    #         ],
+    #         inputs=[
+    #             dash.Input("submit-button", "n_clicks"),
+    #             dash.State("input-text", "value")
+    #         ],
+    #         running=[
+    #             (dash.Output("submit-button", "disabled"), True, False),
+    #             (dash.Output("input-text", "disabled"), True, False)
+    #         ],
+    #         progress=dash.Output("progress-output", "children"),
+    #         prevent_initial_call=True
+    #     )
+    #     def update_output(set_progress, n_clicks, input_value):
+    #         if n_clicks:
+    #             total_steps = 10
+    #             for step in range(total_steps):
+    #                 time.sleep(1)  # Simulating a long process
+    #                 set_progress(f"Processing '{input_value}'... {int((step + 1) / total_steps * 100)}%")
+    #             return f"Long process finished for '{input_value}'!", ""
+    #         return "", "Enter text and click submit to start."
 # ---------------------------------------------------------------------------------------------------------------------
 def prepare_dataset_hotels():
     dct = json.load(open('./data/ex_datasets/hotels.json'))

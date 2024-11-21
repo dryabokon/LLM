@@ -14,7 +14,7 @@ from LLM2 import llm_config
 from LLM2 import llm_models
 from LLM2 import llm_chains
 # ----------------------------------------------------------------------------------------------------------------------
-filename_config_neo4j = './secrets/private_config_neo4j.yaml'
+filename_config_neo4j = './secrets/private_config_neo4j_local.yaml'
 filename_config_ssh = './secrets/private_config_ssh.yaml'
 NEO4J = tools_neo4j.processor_Neo4j(filename_config_neo4j,filename_config_ssh,folder_out)
 # ----------------------------------------------------------------------------------------------------------------------
@@ -145,15 +145,15 @@ def export_to_neo4j_telecom():
 #export_to_neo4j_telecom()
 # ----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
-    #export_to_neo4j_titanic()
+    export_to_neo4j_titanic()
     #llm_cnfg = llm_config.get_config_azure()
-    llm_cnfg = llm_config.get_config_openAI()
-    kg_config = llm_config.get_config_neo4j()
-    LLM = llm_models.get_model(llm_cnfg.filename_config_emb_model)
 
-    query = "How many survived males from Southampton?"
+    # llm_cnfg = llm_config.get_config_openAI()
+    # kg_config = llm_config.get_config_neo4j()
+    # LLM = llm_models.get_model(llm_cnfg.filename_config_emb_model)
+    #
+    # query = "How many survived males from Southampton?"
     #query = "how many woman aged 50+ from Southampton has survived"
-    A = llm_chains.wrap_chain(llm_chains.get_chain_Neo4j(LLM, filename_config_neo4j))
-    llm_interaction.interaction_offline(A,query)
-
+    # A = llm_chains.wrap_chain(llm_chains.get_chain_Neo4j(LLM, filename_config_neo4j))
+    # llm_interaction.interaction_offline(A,query)
     NEO4J.close()

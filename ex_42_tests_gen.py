@@ -1,6 +1,8 @@
-import cv2
-import os
-from LLM import tools_LLM_OPENAI
+from halo import Halo
+import warnings
+warnings.filterwarnings( 'ignore', module = 'langchain_core' )
+from LLM2 import llm_Asistant_OPENAI
+from LLM2 import llm_interaction
 # ----------------------------------------------------------------------------------------------------------------------
 folder_out = './tests/'
 # ----------------------------------------------------------------------------------------------------------------------
@@ -10,19 +12,10 @@ def ex_completion_offline(A,query,filename_in,assistant_id=None):
 
     if assistant_id is None:
         assistant_id = A.create_assistant_book_reader(file.id)
+        A.assistant_id = assistant_id
         do_cleanup = True
 
-    if not isinstance(query,list):
-        query = [query]
-
-    for q in query:
-        print(q)
-        spinner = Halo(text='Processing', spinner='dots')
-        spinner.start()
-        res = A.Q_assistant(q,assistant_id=assistant_id)
-        spinner.stop()
-        print(res)
-        print(''.join(['=']*20))
+    llm_interaction.interaction_offline(A,query,do_debug=False,do_spinner=True)
 
     if do_cleanup:
         A.delete_assistant(assistant_id)
@@ -65,16 +58,21 @@ queries_GF = [ 'What was the favorite horse of the movie producer and passionate
             'Name the favorite horse of the Hollywood producer',
             'Who is Amerigo Bonasera?']
 # ----------------------------------------------------------------------------------------------------------------------
-def ex_code_unit_test(A,filename_in, function_name, folder_out):
+def ex_code_unit_test(A,filename_in, function_name, folder_out,filename_example=None):
     do_cleanup = False
 
     file_id = A.client.files.create(file=open(filename_in, 'rb'), purpose='assistants').id
-    assistant_id = A.create_assistant_code_interpreter([file_id])
+    assistant_id = A.create_assistant_code_analyzer([file_id])
+    example =''
+    if filename_example is not None:
+        example = open(filename_example).read()
+        example ='\nTake below as an example: \n'+example+'\n'
 
-    for i, scanario in enumerate(['Boundary Tests', 'Edge Cases', 'Data Type Tests', 'Corner Cases', 'Happy Path Tests','Negative Tests']):
-        query = f'Focus on testing the logic to cover the {scanario} scenario.' \
-                f'Construct a python file routine with one unit test for function {function_name} ' \
-                f'so it can be executed in with single command in console.'
+    # 'Boundary Tests', 'Edge Cases', 'Data Type Tests', 'Corner Cases', 'Happy Path Tests',
+
+    for i, scanario in enumerate(['Negative Tests']):
+        query = f'Forget all prev instructions. Construct a python file routine with one unit test for function {function_name} to cover the {scanario} scenario. {example}' \
+                f'How write a test, ensure the completion created can be immediately executed as is.'
 
         res = A.Q_assistant(query=query,assistant_id=assistant_id)
         with open(folder_out + 'test_%02d_%s.py' % (i, scanario.replace(' ', '_')), mode='w') as f:
@@ -91,6 +89,8 @@ def ex_code_doc_complience(A,filename_in, function_name=None, assistant_id=None)
     if assistant_id is None:
         do_cleanup = True
         file_id = A.client.files.create(file=open(filename_in, 'rb'), purpose='assistants').id
+
+        #ile.create(file=open(filename_in, 'rb'), purpose='assistants').id
         assistant_id = A.create_assistant_code_analyzer([file_id])
 
     # query = f'Start every new bullet point from the new line. Go over the file and list the all functions as bullets marked *.'
@@ -126,12 +126,12 @@ def ex_fin_analysis(filename_in=None,assistant_id=None):
 # ----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
 
-    A = tools_LLM_OPENAI.Assistant_OPENAILLM(filename_config='./secrets/private_config_openai.yaml',folder_out='./data/output/')
-    # ex_completion_offline(A,filename_in='./data/ex_LLM/Godfather_2.txt',query=queries_GF)
+    A = llm_Asistant_OPENAI.Assistant_OPENAILLM(filename_config='./secrets/private_config_openai.yaml',folder_out='./data/output/')
+    ex_completion_offline(A,filename_in='./data/ex_LLM/Godfather_2.txt',query=queries_GF)
+    #llm_interaction.interaction_offline(A,queries_GF,do_debug=False,do_spinner=True)
     #ex_completion_live(A,assistant_id='asst_FDZA64ZdBEhC29qc0QoWngOj')
-    #ex_code_unit_test(A,filename_in='./ex_01a_unit_tests_codebase.py', function_name='json_to_pandas_v01',folder_out=folder_out)
+    #ex_code_unit_test(A,filename_in='./ex_01a_unit_tests_codebase2.py', function_name='age_category',folder_out=folder_out,filename_example='./tests/test_05_Negative_Tests_github.py')
     #ex_fin_analysis('./data/ex_LLM/MBA_Fin/Purcari-Wineries-PLC-_-Annual-Report-2021.pdf',assistant_id='asst_FDZA64ZdBEhC29qc0QoWngOj')
-    ex_code_doc_complience(A,'C:/Users/Anna/.conda/envs/p39/Lib/site-packages/halo/halo.py')
-
+    #ex_code_doc_complience(A,'C:/Users/acer/.conda/envs/p310/Lib/site-packages/halo/halo.py')
 
 
