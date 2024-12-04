@@ -24,7 +24,7 @@ def ex_animation(folder_in):
     filename_out = './data/output/summary.csv'
     pd.DataFrame({"filename": [], "text": []}).to_csv(filename_out, index=False)
 
-    for filename in tools_IO.get_filenames(folder_in, '*.gif'):
+    for filename in tools_IO.get_filenames(folder_in, '*.jpg'):
         videoFrames = [base64.b64encode(cv2.imencode(".jpg", image)[1]).decode("utf-8") for image in imageio.get_reader(folder_in+filename)]
         content = ["Images:", *map(lambda x: {"type": "image_url", "image_url": {"url": f'data:image/jpg;base64,{x}', "detail": "low"}},videoFrames)]
         messages = [{"role": "system", "content": "Explain what is happening on the gif animation."},{"role": "user", "content": content}]
@@ -69,7 +69,7 @@ def ex_tabular():
 # ----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
 
-    ex_animation('./data/ex_images/05/')
+    ex_animation('./data/ex_images/02/')
     #ex_video()
     #ex_series()
     #ex_tabular()
